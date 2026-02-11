@@ -1,6 +1,347 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import React, { useState, useEffect } from 'react';
+import { 
+  Settings, 
+  Video, 
+  Users, 
+  DollarSign, 
+  TrendingUp, 
+  ChevronRight, 
+  Briefcase, 
+  Zap,
+  Cpu,
+  ShieldCheck,
+  Building2,
+  Database,
+  Share2,
+  CheckCircle2
+} from 'lucide-react';
 
-export default defineConfig({
-  plugins: [react()],
-})
+const FLYWHEEL_DATA = [
+  {
+    id: 'execution',
+    title: 'Core Engine: FB Corp Execution',
+    subtitle: 'Real Projects, Real Data',
+    icon: <Building2 className="w-6 h-6" />,
+    color: 'text-blue-500',
+    bg: 'bg-blue-500/10',
+    border: 'border-blue-500/50',
+    description: 'The foundation of the entire system. Without real execution, the rest is noise.',
+    inputs: ['Multifamily Projects', 'ADUs', 'FL & AZ Expansion', 'Manufacturing via Build OS'],
+    outputs: ['Revenue/Margins', 'Case Studies', 'Site Footage', 'Investor Proof'],
+    tech: ['Drone Capture', 'Time-lapse Cameras', 'AI Note Capture (OAC)', 'Notion Milestones'],
+  },
+  {
+    id: 'media',
+    title: 'Media Engine',
+    subtitle: 'Attention & Visibility',
+    icon: <Video className="w-6 h-6" />,
+    color: 'text-purple-500',
+    bg: 'bg-purple-500/10',
+    border: 'border-purple-500/50',
+    description: 'Turning raw project material into long-form authority and discovery content.',
+    inputs: ['Site Footage', 'War Stories', 'Cost Breakdowns', 'Lessons Learned'],
+    outputs: ['Podcast Episodes', 'YouTube Deep Dives', 'Viral Reels/Shorts', 'UGC Clips'],
+    tech: ['Batch Recording System', 'AI Transcription/Clips', 'Auto-scheduling (n8n)', 'AI Hook Testing'],
+  },
+  {
+    id: 'skool',
+    title: 'Skool: The Filter',
+    subtitle: 'Community & Trust',
+    icon: <Users className="w-6 h-6" />,
+    color: 'text-orange-500',
+    bg: 'bg-orange-500/10',
+    border: 'border-orange-500/50',
+    description: 'The pre-qualification layer. High-intent followers build loyalty before capital calls.',
+    inputs: ['Behind-the-scenes content', 'Education', 'Direct Access'],
+    outputs: ['Qualified Leads', 'Brand Advocates', 'Community Trust', 'Builder Network'],
+    tech: ['Community Moderation', 'Exclusive Training Modules', 'Engagement Analytics'],
+  },
+  {
+    id: 'capital',
+    title: 'Reg A Capital Engine',
+    subtitle: 'The Converter',
+    icon: <DollarSign className="w-6 h-6" />,
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-500/10',
+    border: 'border-emerald-500/50',
+    description: 'Converting warm audience trust into structured operating and acquisition capital.',
+    inputs: ['Audience Trust', 'Deal Flow', 'Track Record'],
+    outputs: ['Investor Commitments', 'Operating Capital', 'Land Acquisition'],
+    tech: ['Investor Funnel Automation', 'AI Q&A Bot', 'CRM Tagging', 'Automated Webinars'],
+  },
+  {
+    id: 'scale',
+    title: 'Scale & Vertical Expansion',
+    subtitle: 'The Accelerator',
+    icon: <TrendingUp className="w-6 h-6" />,
+    color: 'text-red-500',
+    bg: 'bg-red-500/10',
+    border: 'border-red-500/50',
+    description: 'Capital enables bigger projects, which creates bigger content. The loop compounds.',
+    inputs: ['Raised Capital', 'Vertical Integration', 'Institutional Interest'],
+    outputs: ['Bigger Projects', 'Manufacturing ROI', 'Increased Valuation'],
+    tech: ['Automated Cost Dashboards', 'ERP Integration', 'Scale Analytics'],
+  },
+];
+
+const FlywheelSegment = ({ data, active, onClick, index, total }) => {
+  const angle = (index / total) * 360;
+  const rotateStyle = {
+    transform: `rotate(${angle}deg) translateY(-140px) rotate(-${angle}deg)`,
+  };
+
+  return (
+    <button
+      onClick={() => onClick(data)}
+      className={`absolute transition-all duration-500 ease-in-out p-4 rounded-full border-2 flex items-center justify-center hover:scale-110 shadow-lg ${
+        active ? `${data.bg} ${data.border} scale-125 z-10` : 'bg-slate-900 border-slate-700 opacity-60'
+      }`}
+      style={rotateStyle}
+    >
+      <div className={active ? data.color : 'text-slate-400'}>
+        {data.icon}
+      </div>
+    </button>
+  );
+};
+
+const App = () => {
+  const [activeSegment, setActiveSegment] = useState(FLYWHEEL_DATA[0]);
+  const [isRotating, setIsRotating] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  // Auto-rotation effect for the visual flywheel
+  useEffect(() => {
+    if (!isRotating) return;
+    const interval = setInterval(() => {
+      setActiveSegment(prev => {
+        const currentIndex = FLYWHEEL_DATA.findIndex(s => s.id === prev.id);
+        return FLYWHEEL_DATA[(currentIndex + 1) % FLYWHEEL_DATA.length];
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isRotating]);
+
+  const handleShare = () => {
+    // In a real app, this would be the window.location.href
+    const shareText = "FB CORP 2026 Master Flywheel - Integrated Growth Architecture";
+    document.execCommand('copy');
+    // For visual feedback in this demo environment:
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-500/30">
+      {/* Header */}
+      <header className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-950/50 backdrop-blur-md sticky top-0 z-20">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            <Cpu className="w-6 h-6 text-blue-500" />
+            FB CORP <span className="text-slate-500">2026</span> MASTER FLYWHEEL
+          </h1>
+          <p className="text-sm text-slate-400">Integrated Growth Architecture</p>
+        </div>
+        <div className="flex gap-4 items-center">
+          <div className="hidden md:flex px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs text-blue-400 items-center gap-2">
+            <ShieldCheck className="w-3 h-3" /> System Operational
+          </div>
+          
+          <div className="h-6 w-[1px] bg-slate-800 mx-2 hidden md:block"></div>
+
+          <button 
+            onClick={handleShare}
+            className={`flex items-center gap-2 text-xs px-4 py-2 rounded-lg font-bold transition-all ${
+              copied ? 'bg-emerald-600 text-white' : 'bg-white text-slate-950 hover:bg-slate-200'
+            }`}
+          >
+            {copied ? <CheckCircle2 className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+            {copied ? 'Link Copied' : 'Share Link'}
+          </button>
+
+          <button 
+            onClick={() => setIsRotating(!isRotating)}
+            className={`text-xs px-3 py-2 rounded-lg transition-colors border font-medium ${
+              isRotating ? 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white' : 'bg-blue-600/20 border-blue-500/50 text-blue-400'
+            }`}
+          >
+            {isRotating ? 'Pause Loop' : 'Resume Loop'}
+          </button>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 p-8 items-start">
+        
+        {/* Left Column: Visual Flywheel */}
+        <div className="lg:col-span-5 flex flex-col items-center justify-center py-12">
+          <div className="relative w-80 h-80 flex items-center justify-center">
+            {/* Center Hub */}
+            <div className="absolute w-24 h-24 rounded-full bg-slate-900 border-4 border-slate-800 flex items-center justify-center z-20 shadow-[0_0_50px_rgba(30,41,59,0.5)]">
+               <div className="text-center">
+                  <span className="text-[10px] text-slate-500 block uppercase tracking-widest">Core</span>
+                  <span className="text-sm font-bold text-white">FB CORP</span>
+               </div>
+            </div>
+
+            {/* Connecting Circles */}
+            <div className="absolute w-64 h-64 rounded-full border border-slate-800/50 border-dashed animate-spin-slow"></div>
+            <div className="absolute w-40 h-40 rounded-full border border-blue-500/10 animate-reverse-spin"></div>
+
+            {/* Segments */}
+            {FLYWHEEL_DATA.map((segment, index) => (
+              <FlywheelSegment
+                key={segment.id}
+                data={segment}
+                index={index}
+                total={FLYWHEEL_DATA.length}
+                active={activeSegment.id === segment.id}
+                onClick={(s) => {
+                  setActiveSegment(s);
+                  setIsRotating(false);
+                }}
+              />
+            ))}
+            
+            {/* Flow Arrows (Visual Only) */}
+            <svg className="absolute w-full h-full -rotate-12 pointer-events-none opacity-20">
+              <circle cx="50%" cy="50%" r="140" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 20" />
+            </svg>
+          </div>
+
+          <div className="mt-16 w-full space-y-4">
+             <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Sequence Logic</h3>
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <span>Build</span> <ChevronRight className="w-4 h-4 text-slate-600" />
+                  <span>Document</span> <ChevronRight className="w-4 h-4 text-slate-600" />
+                  <span>Publish</span> <ChevronRight className="w-4 h-4 text-slate-600" />
+                  <span>Capital</span> <ChevronRight className="w-4 h-4 text-slate-600" />
+                  <span>Scale</span>
+                </div>
+             </div>
+             
+             <div className="grid grid-cols-2 gap-3 text-center">
+                <div className="p-3 bg-slate-900/30 rounded-lg border border-slate-800">
+                  <div className="text-lg font-bold text-white">Authority</div>
+                  <div className="text-[10px] text-slate-500 uppercase font-medium">Secondary Objective</div>
+                </div>
+                <div className="p-3 bg-slate-900/30 rounded-lg border border-slate-800">
+                   <div className="text-lg font-bold text-white">Assets</div>
+                   <div className="text-[10px] text-slate-500 uppercase font-medium">Primary Objective</div>
+                </div>
+             </div>
+          </div>
+        </div>
+
+        {/* Right Column: Layer Details */}
+        <div className="lg:col-span-7">
+          <div className={`p-8 rounded-3xl border transition-all duration-500 shadow-2xl ${activeSegment.bg} ${activeSegment.border}`}>
+            <div className="flex items-start justify-between mb-8">
+              <div>
+                <div className={`mb-2 font-mono text-xs uppercase tracking-[0.2em] font-bold ${activeSegment.color}`}>
+                  Layer Stage
+                </div>
+                <h2 className="text-4xl font-bold text-white tracking-tight leading-none mb-2">
+                  {activeSegment.title}
+                </h2>
+                <p className="text-lg text-slate-400 italic">
+                  {activeSegment.subtitle}
+                </p>
+              </div>
+              <div className={`p-4 rounded-2xl bg-white/5 border border-white/10 ${activeSegment.color}`}>
+                {activeSegment.icon}
+              </div>
+            </div>
+
+            <p className="text-slate-300 text-lg mb-8 leading-relaxed">
+              {activeSegment.description}
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Inputs */}
+              <div className="space-y-4">
+                <h4 className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  <div className="w-2 h-2 rounded-full bg-slate-400"></div>
+                  Input / Fuel
+                </h4>
+                <ul className="space-y-2">
+                  {activeSegment.inputs.map((item, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-slate-100">
+                      <ChevronRight className={`w-3 h-3 ${activeSegment.color}`} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Outputs */}
+              <div className="space-y-4">
+                <h4 className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  <div className="w-2 h-2 rounded-full bg-blue-400"></div>
+                  Output / Product
+                </h4>
+                <ul className="space-y-2">
+                  {activeSegment.outputs.map((item, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-slate-100">
+                      <ChevronRight className={`w-3 h-3 ${activeSegment.color}`} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Tech */}
+              <div className="space-y-4">
+                <h4 className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  <div className="w-2 h-2 rounded-full bg-purple-400"></div>
+                  Tech Optimization
+                </h4>
+                <ul className="space-y-2">
+                  {activeSegment.tech.map((item, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-slate-100 bg-black/20 p-2 rounded border border-white/5">
+                      <Zap className="w-3 h-3 text-yellow-400 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
+              <div className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Goal</div>
+              <p className="text-slate-300 text-sm">Convert attention into authority, capital, and assets at scale.</p>
+            </div>
+            <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
+              <div className="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Status</div>
+              <p className="text-slate-300 text-sm font-mono flex items-center gap-2">
+                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                System compounding +24% QoQ
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes reverse-spin {
+          from { transform: rotate(360deg); }
+          to { transform: rotate(0deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 20s linear infinite;
+        }
+        .animate-reverse-spin {
+          animation: reverse-spin 15s linear infinite;
+        }
+      `}} />
+    </div>
+  );
+};
+
+export default App;
